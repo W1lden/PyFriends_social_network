@@ -16,10 +16,10 @@ services:
   web:
     build: .
     container_name: web
-    working_dir: /app
+    working_dir: /usr/src/app
     volumes:
-      - .:/app
-      - static_volume:/app/staticfiles
+      - .:/usr/src/app
+      - static_volume:/usr/src/app/staticfiles
     ports:
       - "8000:8000"
     command: sh -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
