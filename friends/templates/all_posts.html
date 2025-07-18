@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>All posts</h1>
+    <form method="get">
+        <input type="text" name="author" placeholder="Filter by author">
+        <button type="submit">Filter</button>
+    </form>
+    <p><a href="{% url 'posts:post_create' %}">Create</a></p>
+
+    <ul>
+        {% for post in posts %}
+            <li>
+                <h3><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h3>
+
+            </li>
+        {% endfor %}
+        {% if not posts %}
+            <p>No posts available.</p>
+        {% endif %}
+    </ul>
+{% endblock %}
