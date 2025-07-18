@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}<title>PyFriends — Главная</title>{% endblock %}
+{% block title %}PyFriends — Главная{% endblock %}
 
 {% block content %}
+    <img src="{% static '/images/hello.gif' %}" height="300">
     <h1 class="mb-4">Добро пожаловать в <strong>PyFriends</strong> 👋</h1>
     <p class="lead">
         Мини-соцсеть на Python для обучения командной разработке, Git Flow и веб-программированию.
@@ -23,6 +24,44 @@
         <li>Git + GitHub</li>
     </ul>
 
-    <h1>Тут будут в будущем последние посты с пагинацией</h1>
-    <img src="{% static '/images/hello.gif' %}" height="300">
+    <hr class="my-5">
+    <h2>Последние посты</h2>
+    <hr>
+
+    {% for post in page_obj %}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+            <h3 class="card-title">{{ post.title }}</h3>
+            <p class="card-text text-muted mb-1">
+                by <strong>{{ post.author.username }}</strong> • {{ post.created_at|date:"F j, Y, H:i" }}
+            </p>
+            <p class="card-text">{{ post.text|linebreaksbr|truncatechars:170 }}</p>
+            <a href="{% url 'posts:post_detail' post.id %}" class="btn btn-outline-primary mt-2">Read More</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No posts available.</p>
+    {% endfor %}
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="First">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+            {% endif %}
+            <li class="page-item current"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
 {% endblock %}
