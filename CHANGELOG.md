@@ -14,3 +14,19 @@
 
 ### Удалено:
 - ...
+
+## [18.07.25] - [Arsen - Разработчик 2]
+
+### Добавлено:
+- Posts model
+- Admin posts
+- post_detail.html, post_form.html, all_posts.html
+- constants.py
+- forms.py
+
+### Изменено:
+- urls.py
+- views.py
+
+### Удалено:
+- ...
