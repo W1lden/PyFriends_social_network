@@ -28,19 +28,23 @@ def post_detail(request, post_id):
 
 def post_create(request):
     if request.method == 'POST':
-        form = CreatePost(request.POST)  # получаем данные от пользователя
+        form = CreatePost(request.POST)
         if form.is_valid():
-            form.save()  # сохраняем в БД
-            return redirect("posts:all_posts")  # редирект
+            form.save()
+            return redirect("posts:all_posts")
     else:
-        form = CreatePost()  # пустая форма
+        form = CreatePost()
 
     return render(request, 'post_form.html', {'form': form})
 
 
 def post_edit(request, post_id):
-    # post = Post.objects.get(id=post_id)
-    pass
+    post = Post.objects.get(id=post_id)
+    form = CreatePost(request.POST or None, instance=post)
+    if form.is_valid():
+        form.save()
+        return redirect('posts:post_detail', post_id=post_id)
+    return render(request, 'post_form.html', {'form': form})
 
 
 def post_delete(request, post_id):
