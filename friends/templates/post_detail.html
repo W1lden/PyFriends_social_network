@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>{{ post.title }} — PyFriends</title>
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.text }}</p>
+            <p class="text-muted">Автор: {{ post.author.username }} | {{ post.created_at }}</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <h4>Комментарии</h4>
+    {% for comment in post.comments.all %}
+        <div class="mb-2">
+            <strong>{{ comment.author.username }}</strong>: {{ comment.text }} <br>
+            <small class="text-muted">{{ comment.created_at }}</small>
+        </div>
+    {% empty %}
+        <p>Комментариев пока нет.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary mt-2" type="submit">Добавить комментарий</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Войдите</a>, чтобы оставить комментарий.</p>
+    {% endif %}
+{% endblock %}
