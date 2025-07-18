@@ -10,22 +10,19 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('posts', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Post',
+            name='Comment',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('text', models.TextField(max_length=1000)),
+                ('text', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('author', models.ForeignKey(
-                    on_delete=django.db.models.deletion.CASCADE,
-                    related_name='posts',
-                    to=settings.AUTH_USER_MODEL
-                )),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='posts.post')),
             ],
         ),
     ]

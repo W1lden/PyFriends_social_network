@@ -1,14 +1,45 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>{{ post.title }} — PyFriends</title>
+{% endblock %}
 
 {% block content %}
 
-    <h2>Post Detail</h1>
+    <div class="card">
+        <div class="card-body">
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.text }}</p>
+            <p class="text-muted">Автор: {{ post.author }} | {{ post.created_at }}</p>
+        </div>
+    </div>
+
     <hr>
-    <h3>Topic: {{ post.title }}</h2>
-    <p>{{ post.text }}</p>
-    <p>Author: {{ post.author }}</p>
-    <p>Created at: {{ post.created_at }}</p>
-    <a href="{% url 'posts:post_delete' post.id %}">Delete post</a>
 
+    <h4>Комментарии</h4>
+    {% for comment in post.comments.all %}
+        <div class="mb-2">
+            <strong>{{ comment.author }}</strong>: {{ comment.text }} <br>
+            <small class="text-muted">{{ comment.created_at }}</small>
+            {% if comment.author == user %}
+                <form method="post" action="{% url 'comments:comment_delete' comment.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                </form>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>Комментариев пока нет.</p>
+    {% endfor %}
 
+    {% if user.is_authenticated %}
+        <hr>
+        <form method="post" action="{% url 'comments:post_detail' post.pk %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary mt-2" type="submit">Добавить комментарий</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Войдите</a>, чтобы оставить комментарий.</p>
+    {% endif %}
 {% endblock %}
