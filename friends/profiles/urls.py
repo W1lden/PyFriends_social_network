@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import profile_view, profile_edit
 
+
 app_name = "profiles"
 
 urlpatterns = [
