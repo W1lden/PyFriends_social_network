@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+
 from posts.models import Post
 from profiles.forms import UserProfileForm
 from profiles.models import UserProfile
@@ -14,6 +15,7 @@ def profile_view(request, username):
     profile = get_object_or_404(UserProfile, user=user)
     posts = Post.objects.filter(author=user).order_by("-created_at")
     is_own_profile = request.user == user
+
     return render(request, "profile_view.html", {
         "profile": profile,
         "posts": posts,
@@ -34,3 +36,4 @@ def profile_edit(request):
         form = UserProfileForm(instance=profile)
 
     return render(request, "profile_edit.html", {"form": form})
+
