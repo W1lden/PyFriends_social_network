@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 
 from .forms import UserProfileForm
 from .models import UserProfile
+from .posts.models import Post
 
 User = get_user_model()
 
@@ -12,7 +13,13 @@ User = get_user_model()
 def profile_view(request, username):
     user = get_object_or_404(User, username=username)
     profile = get_object_or_404(UserProfile, user=user)
-    return render(request, "profiles/profile.html", {"profile": profile})
+    posts = Post.objects.filter(author=user).order_by("-created_at")
+    is_own_profile = request.user == user
+    return render(request, "profiles/profile.html", {
+        "profile": profile,
+        "posts": posts,
+        "is_own_profile": is_own_profile
+    })
 
 @login_required
 def edit_profile(request):
