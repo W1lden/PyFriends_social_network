@@ -5,10 +5,12 @@
 
   <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
     <h1 style="color: #007bff; margin: 0;">All Posts</h1>
+    {% if user.is_authenticated %}
     <a href="{% url 'posts:post_create' %}"
        style="background-color: #28a745; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-weight: 600; transition: background-color 0.3s;">
       Create New Post
     </a>
+    {% endif %}
   </header>
 
   <form method="get" style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem;">

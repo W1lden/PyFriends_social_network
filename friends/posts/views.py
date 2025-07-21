@@ -42,7 +42,9 @@ def post_create(request):
     if request.method == 'POST':
         form = CreatePost(request.POST)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
             return redirect("posts:all_posts")
     else:
         form = CreatePost()
@@ -53,6 +55,9 @@ def post_create(request):
 @login_required
 def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+    if post.author != request.user and not request.user.is_superuser:
+        return redirect("posts:post_detail", post_id=post_id)
+
     form = CreatePost(request.POST or None, instance=post)
     if form.is_valid():
         form.save()
@@ -63,5 +68,9 @@ def post_edit(request, post_id):
 @login_required
 def post_delete(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+
+    if post.author != request.user and not request.user.is_superuser:
+        return redirect("posts:post_detail", post_id=post_id)
+
     post.delete()
     return redirect("posts:all_posts")
