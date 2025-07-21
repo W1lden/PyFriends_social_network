@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Редактировать профиль</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Сохранить</button>
+  </form>
+
+  <a href="{% url 'profiles:profile' username=request.user.username %}">Назад к профилю</a>
+{% endblock %}

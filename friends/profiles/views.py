@@ -2,9 +2,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import UserProfileForm
-from .models import UserProfile
-from .posts.models import Post
+from posts.models import Post
+from profiles.forms import UserProfileForm
+from profiles.models import UserProfile
 
 User = get_user_model()
 
@@ -15,7 +15,8 @@ def profile_view(request, username):
     profile = get_object_or_404(UserProfile, user=user)
     posts = Post.objects.filter(author=user).order_by("-created_at")
     is_own_profile = request.user == user
-    return render(request, "profiles/profile.html", {
+
+    return render(request, "profile_view.html", {
         "profile": profile,
         "posts": posts,
         "is_own_profile": is_own_profile
@@ -23,7 +24,7 @@ def profile_view(request, username):
 
 
 @login_required
-def edit_profile(request):
+def profile_edit(request):
     profile = request.user.userprofile
 
     if request.method == "POST":
@@ -34,4 +35,5 @@ def edit_profile(request):
     else:
         form = UserProfileForm(instance=profile)
 
-    return render(request, "profiles/edit_profile.html", {"form": form})
+    return render(request, "profile_edit.html", {"form": form})
+
