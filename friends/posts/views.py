@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
 from .forms import CreatePost
@@ -5,7 +6,12 @@ from .models import Post
 
 
 def home_page(request):
-    return render(request, "home.html")
+    posts = Post.objects.all().order_by("-created_at")
+    paginator = Paginator(posts, 2)  # Show 5 posts per page.
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "home.html", {"page_obj": page_obj})
 
 
 def all_posts(request):
