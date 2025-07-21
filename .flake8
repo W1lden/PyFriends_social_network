@@ -1,14 +1,14 @@
 [flake8]
-max-line-length = 100
+max-line-length = 79
 exclude =
     venv,
     __pycache__,
-    migrations,
     static,
     media,
     *.egg-info,
     .git,
-    .tox
+    .tox,
+    */migrations/*
 ignore =
     E203,
     W503
