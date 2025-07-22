@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -56,7 +57,7 @@ def post_create(request):
 def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if post.author != request.user and not request.user.is_superuser:
-        return redirect("posts:post_detail", post_id=post_id)
+        raise PermissionDenied()
 
     form = CreatePost(request.POST or None, instance=post)
     if form.is_valid():
@@ -70,7 +71,7 @@ def post_delete(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
     if post.author != request.user and not request.user.is_superuser:
-        return redirect("posts:post_detail", post_id=post_id)
+        raise PermissionDenied()
 
     post.delete()
     return redirect("posts:all_posts")
