@@ -1,8 +1,10 @@
-from django.shortcuts import get_object_or_404, redirect, render
-from .models import Comment
-from posts.models import Post
-from .forms import CommentForm
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
+from posts.models import Post
+
+from .forms import CommentForm
+from .models import Comment
+
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -10,7 +12,7 @@ def post_detail(request, pk):
 
     if request.method == 'POST':
         form = CommentForm(request.POST)
-        print("Ошибки формы:", form.errors)
+        # print("Ошибки формы:", form.errors)
         if form.is_valid():
             if request.user.is_authenticated:
                 comment = form.save(commit=False)
@@ -23,11 +25,10 @@ def post_detail(request, pk):
 
         return render(request, 'post_detail.html', {'post': post, 'form': form})
 
+
 @login_required
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, id=pk)
     if request.user == comment.author or request.user.is_superuser:
         comment.delete()
     return redirect('posts:post_detail', post_id=comment.post.pk)
-
-

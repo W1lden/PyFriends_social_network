@@ -21,7 +21,11 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=200)),
                 ('text', models.TextField(max_length=1000)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to=settings.AUTH_USER_MODEL)),
+                ('author', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='posts',
+                    to=settings.AUTH_USER_MODEL
+                )),
             ],
         ),
     ]
