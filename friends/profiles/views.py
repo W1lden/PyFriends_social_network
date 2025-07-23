@@ -16,6 +16,7 @@ def profile_view(request, username):
     profile = get_object_or_404(UserProfile, user=user)
     posts = Post.objects.filter(author=user).order_by("-created_at")
     is_own_profile = request.user == user
+
     return render(request, "profile_view.html", {
         "profile": profile,
         "posts": posts,
@@ -41,3 +42,4 @@ def profile_edit(request, username):
         form = UserProfileForm(instance=profile)
 
     return render(request, "profile_edit.html", {"form": form})
+
