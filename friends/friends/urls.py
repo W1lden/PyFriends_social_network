@@ -6,8 +6,8 @@ from comments import urls as comments_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include(("posts.urls", "posts"), namespace="posts")),
-    path("", include(("comments.urls", "comments"), namespace="comments")),
+    path("posts/", include(("posts.urls", "posts"), namespace="posts")),
+    path("comments/", include(("comments.urls", "comments"), namespace="comments")),
     path("users/", include("users.urls")),
     path("logout/", LogoutView.as_view(next_page="/"), name="logout"),
 ]

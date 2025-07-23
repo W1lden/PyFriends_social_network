@@ -12,18 +12,21 @@ def post_detail(request, pk):
         form = CommentForm(request.POST)
         print("Ошибки формы:", form.errors)
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.author = request.user
-            comment.save()
-            return redirect('posts:post_detail', post_id=comment.post.pk)
+            if request.user.is_authenticated:
+                comment = form.save(commit=False)
+                comment.post = post
+                comment.author = request.user
+                comment.save()
+                return redirect('posts:post_detail', post_id=comment.post.pk)
+            else:
+                form.add_error(None, "Только авторизованные пользователи могут оставлять комментарии.")
 
-    return render(request, 'post_detail.html', {'post': post, 'form': form})
+        return render(request, 'post_detail.html', {'post': post, 'form': form})
 
 @login_required
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, id=pk)
-    if request.user == comment.author:
+    if request.user == comment.author or request.user.is_superuser:
         comment.delete()
     return redirect('posts:post_detail', post_id=comment.post.pk)
 
