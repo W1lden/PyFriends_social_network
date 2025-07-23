@@ -7,4 +7,5 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements/base.txt
+    pip install --no-cache-dir -r requirements/base.txt && \
+    pip install --no-cache-dir -r requirements/dev.txt

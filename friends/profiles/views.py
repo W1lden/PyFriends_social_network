@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponseForbidden
+
 from posts.models import Post
 from profiles.forms import UserProfileForm
 from profiles.models import UserProfile
@@ -22,14 +24,17 @@ def profile_view(request, username):
 
 
 @login_required
-def profile_edit(request):
-    profile = request.user.userprofile
+def profile_edit(request, username):
+    if request.user.username != username and not request.user.is_superuser:
+        return HttpResponseForbidden("Вы не можете редактировать чужой профиль.")
+
+    profile = get_object_or_404(UserProfile, user__username=username)
 
     if request.method == "POST":
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect("profiles:profile", username=request.user.username)
+            return redirect("profiles:profile", username=username)
     else:
         form = UserProfileForm(instance=profile)
 
