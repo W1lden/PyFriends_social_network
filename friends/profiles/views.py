@@ -26,7 +26,9 @@ def profile_view(request, username):
 @login_required
 def profile_edit(request, username):
     if request.user.username != username and not request.user.is_superuser:
-        return HttpResponseForbidden("Вы не можете редактировать чужой профиль.")
+        return HttpResponseForbidden(
+            "Вы не можете редактировать чужой профиль."
+        )
 
     profile = get_object_or_404(UserProfile, user__username=username)
 

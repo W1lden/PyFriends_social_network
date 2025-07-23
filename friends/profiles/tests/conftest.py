@@ -7,7 +7,9 @@ User = get_user_model()
 
 @pytest.fixture
 def user(db):
-    return User.objects.create_user(username="testuser", password="testpass123")
+    return User.objects.create_user(
+        username="testuser", password="testpass123"
+    )
 
 
 @pytest.fixture
@@ -38,7 +40,10 @@ def other_authenticated_client(client, other_user):
 
 @pytest.fixture
 def admin_user(db):
-    return User.objects.create_superuser(username="admin", password="adminpass")
+    return User.objects.create_superuser(
+        username="admin",
+        password="adminpass"
+    )
 
 
 @pytest.fixture
