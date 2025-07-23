@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponseForbidden
-
+from django.shortcuts import get_object_or_404, redirect, render
 from posts.models import Post
 from profiles.forms import UserProfileForm
 from profiles.models import UserProfile
