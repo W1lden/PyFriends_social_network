@@ -1,4 +1,6 @@
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from .forms import LoginForm, RegisterForm
@@ -31,3 +33,8 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("/")
+
+
+@login_required
+def test_anonymous_page(request):
+    return HttpResponse("Hello, Security!")
