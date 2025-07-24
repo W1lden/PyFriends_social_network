@@ -1,8 +1,7 @@
 import pytest
-from django.urls import reverse
-from django.contrib.auth.models import AnonymousUser
 from comments.models import Comment
-from posts.models import Post
+from django.urls import reverse
+
 
 @pytest.mark.django_db
 def test_anonymous_cannot_add_comment(client, post):
@@ -12,16 +11,23 @@ def test_anonymous_cannot_add_comment(client, post):
     assert Comment.objects.count() == 0
     assert response.status_code == 200  #
 
+
 @pytest.mark.django_db
-def test_authenticated_user_can_add_comment(client, user, post, authenticated_client):
-    response = authenticated_client.post(reverse("comments:post_detail", args=[post.pk]), {
-        "text": "Valid comment"
-    })
+def test_authenticated_user_can_add_comment(
+    client,
+    user,
+    post,
+    authenticated_client
+):
+    response = authenticated_client.post(
+        reverse("comments:post_detail", args=[post.pk]),
+        {"text": "Valid comment"})
     assert response.status_code == 302
     assert Comment.objects.count() == 1
     comment = Comment.objects.first()
     assert comment.author == user
     assert comment.post == post
+
 
 @pytest.mark.django_db
 def test_author_can_delete_own_comment(authenticated_client, comment):
@@ -30,6 +36,7 @@ def test_author_can_delete_own_comment(authenticated_client, comment):
     assert response.status_code == 302
     assert Comment.objects.count() == 0
 
+
 @pytest.mark.django_db
 def test_other_user_cannot_delete_comment(client, other_user, comment):
     client.force_login(other_user)
@@ -37,6 +44,7 @@ def test_other_user_cannot_delete_comment(client, other_user, comment):
     response = client.post(url)
     assert response.status_code == 302
     assert Comment.objects.count() == 1
+
 
 @pytest.mark.django_db
 def test_admin_can_delete_any_comment(admin_client, comment):
