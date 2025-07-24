@@ -21,9 +21,16 @@ def post_detail(request, pk):
                 comment.save()
                 return redirect('posts:post_detail', post_id=comment.post.pk)
             else:
-                form.add_error(None, "Только авторизованные пользователи могут оставлять комментарии.")
+                form.add_error(
+                    None,
+                    "Только авторизованные пользователи могут оставлять комментарии." # noqa
+                )
 
-        return render(request, 'post_detail.html', {'post': post, 'form': form})
+        return render(
+            request,
+            'post_detail.html',
+            {'post': post, 'form': form}
+        )
 
 
 @login_required

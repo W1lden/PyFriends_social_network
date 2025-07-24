@@ -42,7 +42,10 @@ def test_register_view(client):
 @pytest.mark.django_db
 def test_login_view(client, django_user_model):
     """Тест: логин/логаут работают"""
-    django_user_model.objects.create_user(username="tester", password="pass12345")
+    django_user_model.objects.create_user(
+        username="tester",
+        password="pass12345"
+    )
 
     response = client.post(
         reverse("login"), {"username": "tester", "password": "pass12345"}
@@ -60,7 +63,10 @@ def test_login_view(client, django_user_model):
 @pytest.mark.django_db
 def test_invalid_password(client, django_user_model):
     """Тест: неправильный пароль не даёт входа"""
-    django_user_model.objects.create_user(username="tester", password="pass12345")
+    django_user_model.objects.create_user(
+        username="tester",
+        password="pass12345"
+    )
 
     response = client.post(
         reverse("login"), {"username": "tester", "password": "invalid_pass"}
@@ -73,7 +79,10 @@ def test_invalid_password(client, django_user_model):
 @pytest.mark.django_db
 def test_session_save_after_login(client, django_user_model):
     """Тест: сессия сохраняется после входа"""
-    django_user_model.objects.create_user(username="tester", password="pass12345")
+    django_user_model.objects.create_user(
+        username="tester",
+        password="pass12345"
+    )
 
     response = client.post(
         reverse("login"), {"username": "tester", "password": "pass12345"}
