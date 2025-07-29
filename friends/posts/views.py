@@ -9,7 +9,7 @@ from .models import Post
 
 def home_page(request):
     posts = Post.objects.all().order_by("-created_at")
-    paginator = Paginator(posts, 2)  # Show 5 posts per page.
+    paginator = Paginator(posts, 3)  # Show 3 posts per page.
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
