@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Профиль пользователя: {{ profile.user.username }}</h1>
+
+  {% if profile.bio %}
+    <p><strong>О себе:</strong> {{ profile.bio }}</p>
+  {% else %}
+    <p>Пользователь пока не заполнил биографию.</p>
+  {% endif %}
+
+  {% if profile.birth_date %}
+    <p><strong>Дата рождения:</strong> {{ profile.birth_date }}</p>
+  {% endif %}
+
+  <h2>Посты пользователя {{ profile.user.username }}</h2>
+
+  <p><strong>Всего постов:</strong> {{ posts|length }}</p>
+
+  {% if posts %}
+      <ul>
+          {% for post in posts %}
+              <li>
+                  <strong>{{ post.title }}</strong><br>
+                  {{ post.text|truncatechars:100 }}<br>
+                  <em>{{ post.created_at|date:"d.m.Y H:i" }}</em>
+              </li>
+          {% endfor %}
+      </ul>
+  {% else %}
+      <p>У пользователя пока нет постов.</p>
+  {% endif %}
+
+  {% if is_own_profile %}
+    <p><a href="{% url 'profiles:profile_edit' username=profile.user.username %}">Редактировать профиль</a></p>
+  {% endif %}
+
+{% endblock %}

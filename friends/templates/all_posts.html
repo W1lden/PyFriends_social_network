@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="all-posts" style="max-width: 800px; margin: 2rem auto; padding: 1rem; background: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+
+  <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h1 style="color: #007bff; margin: 0;">All Posts</h1>
+    {% if user.is_authenticated %}
+    <a href="{% url 'posts:post_create' %}"
+       style="background-color: #28a745; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-weight: 600; transition: background-color 0.3s;">
+      Create New Post
+    </a>
+    {% endif %}
+  </header>
+
+  <form method="get" style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem;">
+    <input type="text" name="author" placeholder="Filter by author"
+        value="{{ author_filter }}"
+        style="flex-grow: 1; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+    <button type="submit"
+            style="background-color: #007bff; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer;">
+      Filter
+    </button>
+  </form>
+
+  {% if posts %}
+    <ul style="list-style: none; padding-left: 0;">
+      {% for post in posts %}
+        <li style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+          <h3 style="margin: 0;">
+            <a href="{% url 'posts:post_detail' post.id %}"
+               style="text-decoration: none; color: #007bff; transition: color 0.3s;">
+              {{ post.title }}
+            </a>
+          </h3>
+          <p style="color: #555; margin: 0.3rem 0 0;">by <strong>{{ post.author }}</strong></p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p style="color: #777;">No posts available.</p>
+  {% endif %}
+</section>
+{% endblock %}
